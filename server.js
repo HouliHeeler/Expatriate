@@ -14,7 +14,11 @@ MongoClient.connect('mongodb+srv://Houli:Be%40n8678@cluster0.skyx0.mongodb.net/?
 
         app.set('view engine', 'ejs')
 
+        app.use(express.static('public'))
+
         app.use(bodyParser.urlencoded({ extended: true }))
+
+        app.use(bodyParser.json())
 
         app.use(cors())
 
@@ -36,6 +40,22 @@ MongoClient.connect('mongodb+srv://Houli:Be%40n8678@cluster0.skyx0.mongodb.net/?
                 res.redirect('/')
             })
             .catch(error => console.error(error))
+        })
+
+        app.put('/countries', (req,res) => {
+            countries.findOneAndUpdate(
+                { country: 'Switzerland' },
+                {
+                  $set: {
+                    country: req.body.country,
+                  }
+                },
+                {
+                  upsert: true
+                }
+              )
+                .then(res => console.log(res))
+                .catch(error => console.error(error))
         })
 })
 .catch(console.error)
