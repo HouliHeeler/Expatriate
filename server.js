@@ -54,8 +54,21 @@ MongoClient.connect('mongodb+srv://Houli:Be%40n8678@cluster0.skyx0.mongodb.net/?
                   upsert: true
                 }
               )
-                .then(res => console.log(res))
+                .then(result => res.json('Success'))
                 .catch(error => console.error(error))
+        })
+
+        app.delete('/countries', (req,res) => {
+            countries.deleteOne(
+                { country: 'Der Suisse'}
+            )
+            .then(result => {
+                if(result.deletedCount === 0) {
+                    return res.json('The country had been previously vanquished')
+                }
+                res.json('Der Suisse has been annexed')
+            })
+            .catch(error => console.error(error))
         })
 })
 .catch(console.error)
